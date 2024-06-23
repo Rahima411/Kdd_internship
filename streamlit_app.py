@@ -2,39 +2,61 @@ import altair as alt
 import numpy as np
 import pandas as pd
 import streamlit as st
+import docx2txt 
+#from  PyPDF2  import PdfFileReader
+import pdfplumber
 
-"""
-# Welcome to Streamlit!
 
-Edit `/streamlit_app.py` to customize this app to your heart's desire :heart:.
-If you have any questions, checkout our [documentation](https://docs.streamlit.io) and [community
-forums](https://discuss.streamlit.io).
+# def read_pdf(data):
+#     pdfReader = PdfFileReader(data)
+#     count = PdfFileReader.numPages
+#     all_pages_text = ""
+#     for i in range(count):
+#         page  = pdfReader.getPage(i)
+#         all_pages_text += page.extractText()
+#     return all_pages_text
 
-In the meantime, below is an example of what you can do with just a few lines of code:
-"""
+#-------------------------------- main function --------------------------------
+def main (): # main funtion 
+    st.set_page_config(page_title = "Summarize", page_icon=":tada:",layout = "wide") # set the title to summarize and the layout to wide
 
-num_points = st.slider("Number of points in spiral", 1, 10000, 1100)
-num_turns = st.slider("Number of turns in spiral", 1, 300, 31)
+    st.subheader("Rahima Munawar :wave:") # a display message 
 
-indices = np.linspace(0, 1, num_points)
-theta = 2 * np.pi * num_turns * indices
-radius = indices
+    st.title("Upload a file")
+    file = st.file_uploader("Upload a txt , pdf  or a word file", type =["pdf", "docx","txt"])
+  
+   
+    if file is not None:
+        #st.write(dir(text_file))
+        #  a download button to download the original file 
+        st.download_button(
+            label="Download File",
+            data= file,
+            file_name=file.name
+        )
 
-x = radius * np.cos(theta)
-y = radius * np.sin(theta)
+        #------------------------------------ displaying the original file-------------------------------
+        # if its a text file , 
+        if file.type == "text/plain":
+            # st.write(file.read()) # works in bytes 
+            raw_text = str(file.read(),"utf-8")
+            st.write(raw_text)
 
-df = pd.DataFrame({
-    "x": x,
-    "y": y,
-    "idx": indices,
-    "rand": np.random.randn(num_points),
-})
+        # application or pdf 
+        if file.type == "application/pdf":
+            try:
+                with pdfplumber.open(file) as pdf:
+                    text = ""
+                    for page in pdf.pages:
+                        text += page.extract_text() + "\n"
+                    st.write("File Contents\n", text, height=300)
+            except Exception as e:
+                st.error(f"Error reading PDF file: {e}")
+        # reading if the file is a docx       
+        elif file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+            raw_test = docx2txt.process(file)
+            st.write(raw_test)
+        
 
-st.altair_chart(alt.Chart(df, height=700, width=700)
-    .mark_point(filled=True)
-    .encode(
-        x=alt.X("x", axis=None),
-        y=alt.Y("y", axis=None),
-        color=alt.Color("idx", legend=None, scale=alt.Scale()),
-        size=alt.Size("rand", legend=None, scale=alt.Scale(range=[1, 150])),
-    ))
+if __name__ == "__main__":
+    main()
