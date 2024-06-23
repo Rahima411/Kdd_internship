@@ -3,18 +3,8 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 import docx2txt 
-#from  PyPDF2  import PdfFileReader
 import pdfplumber
 
-
-# def read_pdf(data):
-#     pdfReader = PdfFileReader(data)
-#     count = PdfFileReader.numPages
-#     all_pages_text = ""
-#     for i in range(count):
-#         page  = pdfReader.getPage(i)
-#         all_pages_text += page.extractText()
-#     return all_pages_text
 
 #-------------------------------- main function --------------------------------
 def main (): # main funtion 
@@ -23,11 +13,12 @@ def main (): # main funtion
     st.subheader("Rahima Munawar :wave:") # a display message 
 
     st.title("Upload a file")
+
+    # file is used to store the uploaded file, and is used for summarization.
     file = st.file_uploader("Upload a txt , pdf  or a word file", type =["pdf", "docx","txt"])
-  
+    
    
     if file is not None:
-        #st.write(dir(text_file))
         #  a download button to download the original file 
         st.download_button(
             label="Download File",
@@ -36,7 +27,9 @@ def main (): # main funtion
         )
 
         #------------------------------------ displaying the original file-------------------------------
+        #  processig the data according to the data type in order to display.
         # if its a text file , raw_text is a variable used to process the file before displaying
+
         if file.type == "text/plain":
             # st.write(file.read()) # works in bytes 
             raw_text = str(file.read(),"utf-8")
@@ -61,7 +54,7 @@ def main (): # main funtion
         #----------------------------------------------------------------
         if st.button("Summarize") : 
             st.write("Summarizing...")
-        
+            
 
 if __name__ == "__main__":
     main()
