@@ -5,7 +5,6 @@ import streamlit as st
 import docx2txt 
 import pdfplumber
 
-
 #-------------------------------- main function --------------------------------
 def main (): # main funtion 
     st.set_page_config(page_title = "Summarize", page_icon=":tada:",layout = "wide") # set the title to summarize and the layout to wide
