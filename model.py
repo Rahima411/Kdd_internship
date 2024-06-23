@@ -3,7 +3,7 @@ import os
 import PyPDF2
 
 # Setting the API Key 
-genai.configure(api_key=os.getenv("API_KEY", "AIzaSyD5CqvgVGQqj62iEUpBrKOVNy5SSDGnPgQ"))
+genai.configure(api_key=os.environ["API_KEY"])
 
 # Loading the Gemini Model for which will then be used for summarisation
 model = genai.GenerativeModel('gemini-pro')
