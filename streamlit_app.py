@@ -36,7 +36,7 @@ def main (): # main funtion
         )
 
         #------------------------------------ displaying the original file-------------------------------
-        # if its a text file , 
+        # if its a text file , raw_text is a variable used to process the file before displaying
         if file.type == "text/plain":
             # st.write(file.read()) # works in bytes 
             raw_text = str(file.read(),"utf-8")
@@ -54,8 +54,13 @@ def main (): # main funtion
                 st.error(f"Error reading PDF file: {e}")
         # reading if the file is a docx       
         elif file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-            raw_test = docx2txt.process(file)
+            raw_test = docx2txt.process(file) 
             st.write(raw_test)
+
+
+        #----------------------------------------------------------------
+        if st.button("Summarize") : 
+            st.write("Summarizing...")
         
 
 if __name__ == "__main__":
