@@ -24,7 +24,7 @@ def summarize_text(text):
 
     return response.text  # Adjust to the correct field from the response
 
-pdf_path = '/content/article.pdf'
+pdf_path = '/Users/rahimamunawar/Downloads/article.pdf'
 pdf_text = extract_text_from_pdf(pdf_path)
 summary = summarize_text(pdf_text)
 print(summary)
