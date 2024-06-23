@@ -4,6 +4,7 @@ import pandas as pd
 import streamlit as st
 import docx2txt 
 import pdfplumber
+from model import summarize_text
 
 #-------------------------------- main function --------------------------------
 def main (): # main funtion 
@@ -44,15 +45,23 @@ def main (): # main funtion
                     st.write("File Contents\n", text, height=300)
             except Exception as e:
                 st.error(f"Error reading PDF file: {e}")
+
         # reading if the file is a docx       
         elif file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-            raw_test = docx2txt.process(file) 
-            st.write(raw_test)
+            raw_text = docx2txt.process(file) 
+            st.write(raw_text)
 
 
-        #----------------------------------------------------------------
+        #--------------------------Summarising and Displaying the Generated Text------------------------
         if st.button("Summarize") : 
-            st.write("Summarizing...")
+            if file.type == "text/plain":
+                summary = summarize_text(raw_text)
+            elif file.type == "application/pdf":
+                summary = summarize_text(text)
+            elif file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+                summary = summarize_text(raw_text)
+            st.write("Summary:\n", summary)
+
             
 
 if __name__ == "__main__":
