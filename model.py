@@ -15,9 +15,9 @@ def extract_text_from_pdf(pdf_path):
 
     for page_num in range(len(pdf_reader.pages)):
       text = ""
-      page = pdf_reader.pages[page_num].extract_text().lower()
+      page = pdf_reader.pages[page_num]
       text += page.extract_text()
-    return text
+    return text.lower()
 
 # A function which summarises the text extracted using GenAI 
 def summarize_text(text, summary_style = None, summary_length = None):
