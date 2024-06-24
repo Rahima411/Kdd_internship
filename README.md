@@ -80,5 +80,12 @@ The web application was made with Streamlit. The streamlit_app.py script include
 - File uploading and text extraction.
 - Text cleanup and preprocessing.
 - Integration of the Gemini model for summarization using the summarize_text from model.py 
+- The user can choose the summary style and length.
 - The web interface displays both the original and the summarised text.
+
+### License
+This project is licensed under the Apache License Version 2.0. See the LICENSE file for details.
+
+
+
 
