@@ -1,6 +1,6 @@
 # PubMed Article Summarizer
 
-This project is a web application that allows users to upload PubMed articles and get summarized versions of the text. The application is developed using Streamlit and integrates Google's Gemini Generative AI model for text summarization. This README file provides detailed instructions on setting up and using the application.
+This project is a web application that lets users upload PubMed articles and receive summarised versions of the text. It is developed using Streamlit and integrates Google’s Gemini Generative AI model for text summarisation. Detailed instructions for setting up and using the application are provided in this README file.
 
 ## Features
 - Upload papers from PubMed in TXT, DOCX, or PDF formats.
