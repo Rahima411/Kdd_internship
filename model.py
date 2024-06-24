@@ -20,12 +20,12 @@ def extract_text_from_pdf(pdf_path):
     return text.lower()
 
 # A function which summarises the text extracted using GenAI 
-def summarize_text(text, summary_style = None, summary_length = None):
+def summarize_text(text, style = None, length = None):
    
     prompt = 'Summarize this text: '
 
-    if summary_style is not None and summary_length is not None:
-       prompt = f'Write a {summary_length} {summary_length} summary of: '
+    if style is not None and length is not None:
+       prompt = f'Write a {length} {length} summary of: '
        
     response = model.generate_content([
     prompt, text])
