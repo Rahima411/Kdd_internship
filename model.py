@@ -33,7 +33,8 @@ def summarize_text(text, summary_style = None, summary_length = None):
 
     return response.text  
 
-# Testing the functions
+# testing the functions
+# change the path before runing this on your local machine
 pdf_path = '/Users/rahimamunawar/Downloads/article.pdf'
 pdf_text = extract_text_from_pdf(pdf_path)
 summary = summarize_text(pdf_text)
