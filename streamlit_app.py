@@ -5,6 +5,8 @@ import docx2txt
 import pdfplumber
 import re
 from model import summarize_text
+from fpdf import FPDF
+
 
 #----------------a funnction to clean up the text extracted from the files---------
 def clean_text(text):
@@ -23,8 +25,17 @@ def clean_text(text):
 
     # removing weblinks if they are found
     text = re.sub(r'www.\S+', '', text)
-    
+
     return text.lower().strip() 
+
+
+#--------------------a function which converts the generated summary to a pdf------
+def create_pdf(summary):
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", size=12)
+    pdf.multi_cell(0, 10, summary)
+    return pdf.output(dest='S').encode('latin1')
 
 #-------------------------------- main function -----------------------------------
 def main (): # main funtion 
@@ -64,7 +75,9 @@ def main (): # main funtion
                 border: 1px solid #bdc3c7; 
                 padding: 20px; 
                 border-radius: 5px; 
-                background-color: #ecf0f1;
+                background-color: #101a26;
+                height: 300px; 
+                overflow-y: scroll; 
                 margin-bottom: 30px;
             }
         </style>
@@ -116,7 +129,7 @@ def main (): # main funtion
         if file.type == "text/plain":
             raw_text = str(file.read(), "utf-8")
             cleaned_text = clean_text(raw_text)
-            content_area.text_area('', cleaned_text, height=300, key="raw_text")
+            content_area.markdown(f"<div class='file-content'>{cleaned_text}</div>", unsafe_allow_html=True)
 
         # if its a pdf file , text is a variable used to process the file 
         elif file.type == "application/pdf":
@@ -126,7 +139,7 @@ def main (): # main funtion
                     for page in pdf.pages:
                         text += page.extract_text().lower() + "\n"
                     cleaned_text = clean_text(text)
-                    content_area.text_area('', cleaned_text, height=300, key="pdf_text")
+                    content_area.markdown(f"<div class='file-content'>{cleaned_text}</div>", unsafe_allow_html=True)
             except Exception as e:
                 st.error(f"Error reading PDF file: {e}")
 
@@ -134,7 +147,7 @@ def main (): # main funtion
         elif file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
             raw_text = docx2txt.process(file)
             cleaned_text = clean_text(raw_text)
-            content_area.text_area('', cleaned_text, height=300, key="docx_text")
+            content_area.markdown(f"<div class='file-content'>{cleaned_text}</div>", unsafe_allow_html=True)
 
 
         #--------------------------Providing the user with summary options------------------------------ 
@@ -161,7 +174,24 @@ def main (): # main funtion
             elif file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
                 summary = summarize_text(raw_text, summary_style, summary_length)
 
-            summary_area.text_area('',summary, height=300, key="summary")
+            summary_area.markdown(f"<div class='summary-content'>{summary}</div>", unsafe_allow_html=True)
+
+
+        #--------------------------Allowing the user to download the file as pdf and txt-----------------
+            st.download_button(
+                label="Download Summary as TXT",
+                data=summary,
+                file_name="summary.txt",
+                mime="text/plain"
+            )
+            
+            pdf_data = create_pdf(summary)
+            st.download_button(
+                label="Download Summary as PDF",
+                data=pdf_data,
+                file_name="summary.pdf",
+                mime="application/pdf"
+            )
 
             
 if __name__ == "__main__":
