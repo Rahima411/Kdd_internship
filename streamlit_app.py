@@ -9,9 +9,8 @@ from model import summarize_text
 #-------------------------------- main function --------------------------------
 def main (): # main funtion 
     st.set_page_config(page_title="PubMed Summariser", page_icon=":tada:", layout="wide")   
-    # st.subheader("Rahima Munawar :wave:") # a display message 
-
-    # CSS for styling for the webpage
+    
+    # CSS for styling of the webpage
     st.markdown(
         """
         <style>
@@ -97,30 +96,39 @@ def main (): # main funtion
         if file.type == "text/plain":
             raw_text = str(file.read(), "utf-8")
             content_area.text_area("File Content", raw_text, height=300, key="raw_text")
+
         elif file.type == "application/pdf":
             try:
                 with pdfplumber.open(file) as pdf:
                     text = ""
                     for page in pdf.pages:
-                        text += page.extract_text().lower()+ "\n"
-                    content_area.text_area("File Content", text.replace("\n", ""), height=300, key="pdf_text")
+                        text += page.extract_text().lower() + "\n"
+                    content_area.text_area("File Content", text, height=300, key="pdf_text")
             except Exception as e:
                 st.error(f"Error reading PDF file: {e}")
+
         elif file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
             raw_text = docx2txt.process(file)
             content_area.text_area("File Content", raw_text, height=300, key="docx_text")
 
+
+
         #--------------------------Summarising and Displaying the Generated Text------------------------
         if st.button("Summarize"):
+
             st.markdown("### Summary")
             summary_area = st.empty()
             summary_area.markdown("<div class='summary-content'></div>", unsafe_allow_html=True)
+
             if file.type == "text/plain":
                 summary = summarize_text(raw_text)
+
             elif file.type == "application/pdf":
                 summary = summarize_text(text)
+
             elif file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
                 summary = summarize_text(raw_text)
+
             summary_area.text_area("Summary", summary, height=300, key="summary")
 
             
