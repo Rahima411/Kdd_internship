@@ -37,7 +37,7 @@ def main():
     df_train.replace(r'^\s*$', float('NaN'), regex=True, inplace=True)
     df_train_cleaned = df_train.dropna(how='any')
     
-#   declaring nltk variables which will be used to  
+#   declaring nltk variables which will be used to clean the articles in the dataset 
     lemmatizer  = WordNetLemmatizer()
     stopwords   = set(nltk.corpus.stopwords.words('english'))
     punctuation = string.punctuation
