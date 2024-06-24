@@ -1,4 +1,3 @@
-import altair as alt
 import numpy as np
 import pandas as pd
 import streamlit as st
@@ -165,6 +164,5 @@ def main (): # main funtion
             summary_area.text_area('',summary, height=300, key="summary")
 
             
-
 if __name__ == "__main__":
     main()
