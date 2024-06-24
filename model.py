@@ -14,9 +14,8 @@ def extract_text_from_pdf(pdf_path):
     pdf_reader = PyPDF2.PdfReader(pdf_file)
 
     for page_num in range(len(pdf_reader.pages)):
-      page_text = pdf_reader.pages[page_num].extract_text().lower()
       text = ""
-      page = pdf_reader.pages[page_num]
+      page = pdf_reader.pages[page_num].extract_text().lower()
       text += page.extract_text()
     return text
 
