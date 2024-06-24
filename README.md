@@ -2,24 +2,24 @@
 
 This project is a web application that allows users to upload PubMed articles and get summarized versions of the text. The application is developed using Streamlit and integrates Google's Gemini Generative AI model for text summarization. This README file provides detailed instructions on setting up and using the application.
 
-### Features
+## Features
 - Upload papers from PubMed in TXT, DOCX, or PDF formats.
 - Preprocess and clean up the text in the uploaded files.
 - Use Google's Gemini Generative AI model to summarise the text.
 - Display the material in its original and summarised versions on the web page. 
 - The option of summary length and style.
 
-### Setup Instructions
+## Setup Instructions
 
 Follow these steps to set up the application on your local machine.
 
-#### Prerequisites
+### Prerequisites
 - Python 3.7 or higher
 - pip (Python package installer)
 - API key for Google's Generative AI model (Gemini)
 
 
-### Installation
+## Installation
 
 1. Clone the Respository
 
@@ -40,7 +40,7 @@ Follow these steps to set up the application on your local machine.
    $ pip install -r requirements.txt
    ```
 
-### Usage
+## Usage
 
 1. Run the app
 
@@ -55,7 +55,7 @@ Follow these steps to set up the application on your local machine.
 
 5. To generate and read the summary, click the "Summarise" button.
 
-### Data Preparation
+## Data Preparation
 
 The dataset for this project is Hugging Face's PubMed Summarization dataset. Data preparation comprises the following:
 
@@ -64,7 +64,7 @@ The dataset for this project is Hugging Face's PubMed Summarization dataset. Dat
 - Normalising and tokenising the text.
 - These tasks are handled by the Python script data_preparation.py.
 
-### Model Integration
+## Model Integration
 
 The summary is done with Google's Gemini Generative AI model. The model.py script can handle:
 
@@ -73,7 +73,7 @@ The summary is done with Google's Gemini Generative AI model. The model.py scrip
 - The model is integrated into the Streamlit application.
 
 
-### Web Application Development
+## Web Application Development
 
 The web application was made with Streamlit. The streamlit_app.py script includes the following:
 
@@ -83,7 +83,7 @@ The web application was made with Streamlit. The streamlit_app.py script include
 - The user can choose the summary style and length.
 - The web interface displays both the original and the summarised text.
 
-### License
+## License
 This project is licensed under the Apache License Version 2.0. See the LICENSE file for details.
 
 
