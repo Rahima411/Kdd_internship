@@ -50,6 +50,7 @@ def main():
     create_token_column(test_df_test, lemmatizer, stopwords, punctuation)
     create_token_column(test_df_validation, lemmatizer, stopwords, punctuation)
 
+#   change the paths before runing this on your local machine
     test_df_train.to_csv('/Users/rahimamunawar/Documents/GitHub/Kdd_internship/test_df_train.csv')
     test_df_test.to_csv('/Users/rahimamunawar/Documents/GitHub/Kdd_internship/test_df_test.csv')
     test_df_validation.to_csv('/Users/rahimamunawar/Documents/GitHub/Kdd_internship/test_df_validate.csv')
