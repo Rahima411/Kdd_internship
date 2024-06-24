@@ -155,8 +155,8 @@ def main (): # main funtion
     
         # summary style is a variable used to save the style type selected by the user
         # summary length is a variable used to save the length selected by the user
-        summary_style = st.selectbox("Select Summary Style", ["Narrative", "Expository", "Argumentative", "Descriptive"])
-        summary_length = st.radio("Select Summary Length", ["Brief", "Detailed"])
+        style = st.selectbox("Select Summary Style", ["Narrative", "Expository", "Argumentative", "Descriptive"])
+        length = st.radio("Select Summary Length", ["Brief", "Detailed"])
 
         #--------------------------Summarising and Displaying the Generated Text------------------------
         if st.button("Summarize"):
@@ -166,13 +166,13 @@ def main (): # main funtion
             summary_area.markdown("<div class='summary-content'></div>", unsafe_allow_html=True)
 
             if file.type == "text/plain":
-                summary = summarize_text(raw_text, summary_style, summary_length)
+                summary = summarize_text(raw_text, style, length)
 
             elif file.type == "application/pdf":
-                summary = summarize_text(text, summary_style, summary_length)
+                summary = summarize_text(text, style, length)
 
             elif file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-                summary = summarize_text(raw_text, summary_style, summary_length)
+                summary = summarize_text(raw_text, style, length)
 
             summary_area.markdown(f"<div class='summary-content'>{summary}</div>", unsafe_allow_html=True)
 
