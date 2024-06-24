@@ -2,9 +2,8 @@ from datasets import load_dataset
 import pandas as pd
 import nltk
 from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize, sent_tokenize
+from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
-import re
 import string
 
 def normalize(text, lemmatizer, stopwords, punctuation):

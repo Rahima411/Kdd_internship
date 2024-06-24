@@ -1,6 +1,7 @@
-# 🌀 Spiral template
+# PubMed Article Summarizer
 
-A simple Streamlit app that draws a spiral. 
+This project is a web application that allows users to upload PubMed articles and get summarized versions of the text. The application is developed using Streamlit and integrates Google's Gemini Generative AI model for text summarization. This README file provides detailed instructions on setting up and using the application.
+
 
 [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://basic-template.streamlit.app/)
 
