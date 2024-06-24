@@ -2,10 +2,10 @@ import google.generativeai as genai
 import os
 import PyPDF2
 
-# Setting the API Key 
+# setting the API Key 
 genai.configure(api_key=os.environ["API_KEY"])
 
-# Loading the Gemini Model for which will then be used for summarisation
+# loading the Gemini Model which will then be used for summarisation
 model = genai.GenerativeModel('gemini-pro')
 
 # A function which extracts text from the pdf files using PyPDF2
