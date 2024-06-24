@@ -4,9 +4,30 @@ import pandas as pd
 import streamlit as st
 import docx2txt 
 import pdfplumber
+import re
 from model import summarize_text
 
-#-------------------------------- main function --------------------------------
+#----------------a funnction to clean up the text extracted from the files---------
+def clean_text(text):
+
+    # removing multiple new line characters if found in the file
+    text = re.sub(r'\n+', '\n', text).strip()
+
+    # replacing multiple spaces with a single space
+    text = re.sub(r'\s+', ' ', text)  
+    
+    # removing non-ASCII characters if they are found 
+    text = re.sub(r'[^\x00-\x7F]+', ' ', text) 
+    
+    # removing hyperlinks if they are found 
+    text = re.sub(r'http\S+', '', text)
+
+    # removing weblinks if they are found
+    text = re.sub(r'www.\S+', '', text)
+    
+    return text.lower().strip() 
+
+#-------------------------------- main function -----------------------------------
 def main (): # main funtion 
     st.set_page_config(page_title="PubMed Summariser", page_icon=":tada:", layout="wide")   
     
@@ -57,7 +78,7 @@ def main (): # main funtion
         """
         <div class='main-header'>
             <h1>PUBMED SUMMARISER</h1>
-            <p>Upload a file (PDF, DOCX, or TXT) and get a summarized version</p>
+            <p>Upload a file and get a summarized version</p>
         </div>
         """,
         unsafe_allow_html=True
@@ -73,7 +94,7 @@ def main (): # main funtion
         unsafe_allow_html=True
     )
     
-    file = st.file_uploader("", type=["pdf", "docx", "txt"], key="fileUploader", help="Upload a TXT, PDF, or Word file (max size: 200MB)")
+    file = st.file_uploader("", type=["pdf", "docx", "txt"], key="fileUploader", help="Upload a TXT, PDF, or Word file (max size: 200MB)", label_visibility="collapsed")
     
    
     if file is not None:
@@ -85,9 +106,9 @@ def main (): # main funtion
             mime=file.type
         )
 
-        #------------------------------------ displaying the original file-------------------------------
+        #-------------------------------Displaying the original file-------------------------------
         #  processing the data according to the data type in order to display.
-        # if its a text file , raw_text is a variable used to process the file before displaying
+        # if its a text file , raw_text is a variable used to process the file 
 
         st.markdown("### Original File Content")
         content_area = st.empty()
@@ -95,23 +116,35 @@ def main (): # main funtion
         
         if file.type == "text/plain":
             raw_text = str(file.read(), "utf-8")
-            content_area.text_area("File Content", raw_text, height=300, key="raw_text")
+            cleaned_text = clean_text(raw_text)
+            content_area.text_area('', cleaned_text, height=300, key="raw_text")
 
+        # if its a pdf file , text is a variable used to process the file 
         elif file.type == "application/pdf":
             try:
                 with pdfplumber.open(file) as pdf:
                     text = ""
                     for page in pdf.pages:
                         text += page.extract_text().lower() + "\n"
-                    content_area.text_area("File Content", text, height=300, key="pdf_text")
+                    cleaned_text = clean_text(text)
+                    content_area.text_area('', cleaned_text, height=300, key="pdf_text")
             except Exception as e:
                 st.error(f"Error reading PDF file: {e}")
 
+        # if its a docx file , raw_text is a variable used to process the file
         elif file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
             raw_text = docx2txt.process(file)
-            content_area.text_area("File Content", raw_text, height=300, key="docx_text")
+            cleaned_text = clean_text(raw_text)
+            content_area.text_area('', cleaned_text, height=300, key="docx_text")
 
 
+        #--------------------------Providing the user with summary options------------------------------ 
+        st.markdown("### Summary Options")
+    
+        # summary style is a variable used to save the style type selected by the user
+        # summary length is a variable used to save the length selected by the user
+        summary_style = st.selectbox("Select Summary Style", ["Narrative", "Expository", "Argumentative", "Descriptive"])
+        summary_length = st.radio("Select Summary Length", ["Brief", "Detailed"])
 
         #--------------------------Summarising and Displaying the Generated Text------------------------
         if st.button("Summarize"):
@@ -121,15 +154,15 @@ def main (): # main funtion
             summary_area.markdown("<div class='summary-content'></div>", unsafe_allow_html=True)
 
             if file.type == "text/plain":
-                summary = summarize_text(raw_text)
+                summary = summarize_text(raw_text, summary_style, summary_length)
 
             elif file.type == "application/pdf":
-                summary = summarize_text(text)
+                summary = summarize_text(text, summary_style, summary_length)
 
             elif file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-                summary = summarize_text(raw_text)
+                summary = summarize_text(raw_text, summary_style, summary_length)
 
-            summary_area.text_area("Summary", summary, height=300, key="summary")
+            summary_area.text_area('',summary, height=300, key="summary")
 
             
 
