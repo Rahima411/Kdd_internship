@@ -34,7 +34,14 @@ def create_pdf(summary):
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", size=12)
-    pdf.multi_cell(0, 10, summary)
+
+    try:
+        summary_utf8 = summary.encode('latin1', 'replace').decode('latin1')
+        pdf.multi_cell(0, 10, summary_utf8)
+    except UnicodeEncodeError:
+        st.error("Error encoding summary to PDF. Some characters may not be supported.")
+        return None
+
     return pdf.output(dest='S').encode('latin1')
 
 #-------------------------------- main function -----------------------------------
@@ -186,12 +193,13 @@ def main (): # main funtion
             )
             
             pdf_data = create_pdf(summary)
-            st.download_button(
-                label="Download Summary as PDF",
-                data=pdf_data,
-                file_name="summary.pdf",
-                mime="application/pdf"
-            )
+            if pdf_data:
+                st.download_button(
+                    label="Download Summary as PDF",
+                    data=pdf_data,
+                    file_name="summary.pdf",
+                    mime="application/pdf"
+                )
 
             
 if __name__ == "__main__":
