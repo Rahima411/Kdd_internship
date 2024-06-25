@@ -25,7 +25,7 @@ def summarize_text(text, style = None, length = None):
     prompt = 'Summarize this text: '
 
     if style is not None and length is not None:
-       prompt = f'Write a {length} {length} summary of: '
+       prompt = f'Write a {length} {style} summary of: '
        
     response = model.generate_content([
     prompt, text])
